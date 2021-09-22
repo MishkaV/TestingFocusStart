@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,14 +59,6 @@ class MainActivity : ComponentActivity() {
             }
         })
 
-
-//        setContent {
-//            FocusStartTheme {
-//                Surface(color = MaterialTheme.colors.background) {
-//                    CurrencyList(Fish.valueList)
-//                }
-//            }
-//        }
     }
 }
 
@@ -81,7 +74,7 @@ fun CurrencyList(currencyList: HashMap<String, ValuteInfo>) {
         Card(
             shape = RoundedCornerShape(10.dp),
             elevation = 20.dp,
-            border = BorderStroke(1.dp, Color.Black),
+//            border = BorderStroke(1.dp, Color.Black),
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxSize()
@@ -102,7 +95,7 @@ fun CurrencyCard(currency: ValuteInfo) {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = 20.dp,
-        border = BorderStroke(1.dp, Color.Black),
+//        border = BorderStroke(1.dp, Color.Black),
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
@@ -114,20 +107,26 @@ fun CurrencyCard(currency: ValuteInfo) {
                 .padding(15.dp)
                 .fillMaxWidth()
         ){
-            Column {
+            Column(modifier = Modifier.weight(2f)) {
                 Text(text = currency.charCode, style = Typography.body2)
-                Text(text = currency.name)
+                Text(text = currency.name, maxLines = 3, overflow = TextOverflow.Ellipsis)
             }
 
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.End
+
             ){
                 Text(text = String.format("%.4f", currency.value) + " ₽")
+
                 val delta = currency.value - currency.previous
                 var color = Green
                 if (delta < 0)
                     color = Red
-                Text(text = String.format("%.4f", delta), color = color)
+                Text(
+                    text = String.format("%.4f", delta),
+                    color = color
+                )
             }
         }
 
