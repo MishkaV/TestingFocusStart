@@ -12,10 +12,10 @@ data class DailyData (
     @SerializedName( "Timestamp")
     var timestamp : String,
     @SerializedName( "Valute")
-    var valute : HashMap<String, Valute>
+    var valuteList : HashMap<String, ValuteInfo>
 )
 
-data class Valute(
+data class ValuteInfo(
     @SerializedName("ID")
     var id: String,
     @SerializedName("NumCode")

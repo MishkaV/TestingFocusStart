@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface DailyApi {
     @GET("daily_json.js")
-    suspend fun getDailyData() : Response<DailyData>
+    suspend fun getDailyData() : DailyData
 }

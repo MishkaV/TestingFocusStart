@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class MajorViewModel (private val repository: DailyRepository) : ViewModel(){
 
-    val rootResponse : MutableLiveData<Response<DailyData>> = MutableLiveData()
+    val rootResponse : MutableLiveData<DailyData> = MutableLiveData()
 
     fun getDailyData() {
         viewModelScope.launch {
