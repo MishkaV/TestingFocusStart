@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.R
 import androidx.activity.compose.setContent
@@ -46,12 +47,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val repository = DailyRepository()
-        val viewModulFactory = MajorViewModulFactory(repository)
-        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
-        viewModel.getDailyData()
+        inits()
         viewModel.rootResponse.observe(this, Observer { response ->
-            if (response.isSuccessful){
+
+            if (response != null && response.isSuccessful){
                 setContent {
                     FocusStartTheme {
                         Surface(color = MaterialTheme.colors.background) {
@@ -63,6 +62,14 @@ class MainActivity : ComponentActivity() {
         })
 
     }
+
+    private fun inits() {
+        val repository = DailyRepository()
+        val viewModulFactory = MajorViewModulFactory(repository)
+        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
+        viewModel.getDailyData()
+    }
+
 }
 
 

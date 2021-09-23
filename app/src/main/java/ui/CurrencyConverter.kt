@@ -8,6 +8,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +45,7 @@ fun CurrencyConverter(charCode: String, name : String, value: Float) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var textState by remember { mutableStateOf(TextFieldValue())}
+                    var textState by rememberSaveable { mutableStateOf("")}
 
                 Card(
                     shape = RoundedCornerShape(10.dp),
@@ -62,8 +63,8 @@ fun CurrencyConverter(charCode: String, name : String, value: Float) {
                     ) {
                         Text(charCode, style = Typography.body2, fontSize = 20.sp)
                         var foreign_value = stringResource(R.string.zero)
-                        if (textState.text.length > 0 && textState.text.toDoubleOrNull() != null)
-                            foreign_value = String.format("%.4f",textState.text.toDouble() * value)
+                        if (textState.length > 0 && textState.toDoubleOrNull() != null)
+                            foreign_value = String.format("%.4f",textState.toDouble() * value)
                         Text(foreign_value, fontSize = 30.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
