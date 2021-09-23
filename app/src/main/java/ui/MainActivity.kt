@@ -46,109 +46,35 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val repository = DailyRepository()
-//        val viewModulFactory = MajorViewModulFactory(repository)
-//        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
-//        viewModel.getDailyData()
-//        viewModel.rootResponse.observe(this, Observer { response ->
-//            if (response.isSuccessful){
-//                setContent {
-//                    FocusStartTheme {
-//                        Surface(color = MaterialTheme.colors.background) {
-//                            response.body()?.let { CurrencyList(it.valuteList) }
-//                        }
-//                    }
-//                }
-//            }
-//        })
-        setContent {
-            FocusStartTheme {
-//                ConverterCard(charCode = "RUB", name = "РОССИЙСКИЙ РУБЛЬ")
-
-                CurrencyConverter("AUD", "Австралийский доллар", 52.7801)
-            }
-
-        }
-    }
-}
-
-@Composable
-fun CurrencyList(currencyList: HashMap<String, ValuteInfo>) {
-    Column(horizontalAlignment = Alignment.Start) {
-        Text(
-            text = stringResource(com.example.focusstart.R.string.currency_head),
-            fontSize = 30.sp,
-            modifier = Modifier.padding(start = 14.dp, top = 20.dp)
-        )
-
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = 20.dp,
-            modifier = Modifier
-                .padding(15.dp)
-                .fillMaxSize()
-        ) {
-            LazyColumn {
-                currencyList.values.forEach { item ->
-                    item {
-                        CurrencyCard(item)
+        val repository = DailyRepository()
+        val viewModulFactory = MajorViewModulFactory(repository)
+        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
+        viewModel.getDailyData()
+        viewModel.rootResponse.observe(this, Observer { response ->
+            if (response.isSuccessful){
+                setContent {
+                    FocusStartTheme {
+                        Surface(color = MaterialTheme.colors.background) {
+                            response.body()?.let { Navigation(it) }
+                        }
                     }
                 }
-             }
-        }
+            }
+        })
+
     }
 }
 
+
+@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
 @Composable
-fun CurrencyCard(currency: ValuteInfo) {
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        elevation = 20.dp,
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()
-        ) {
-        Row (
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(15.dp)
-                .fillMaxWidth()
-        ){
-            Column(modifier = Modifier.weight(2f)) {
-                Text(text = currency.charCode, style = Typography.body2)
-                Text(text = currency.name, maxLines = 3, overflow = TextOverflow.Ellipsis)
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.End
-            ){
-                Text(text = String.format("%.4f", currency.value / currency.nominal) + " ₽")
-                val delta = currency.value - currency.previous
-                var color = Green
-                if (delta < 0)
-                    color = Red
-                Text(
-                    text = String.format("%.4f", delta / currency.nominal),
-                    color = color
-                )
-            }
-        }
-
+fun DefaultPreview() {
+    FocusStartTheme {
+        CurrencyConverter("AUD", "Австралийский доллар", 52.7801F)
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    showBackground = true,
-//    name = "Dark Mode"
-//)
-//@Composable
-//fun DefaultPreview() {
-//    FocusStartTheme {
-////        CurrencyList(Fish.valueList)
-//    }
-//}

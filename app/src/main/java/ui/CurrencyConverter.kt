@@ -23,7 +23,7 @@ import com.example.focusstart.ui.theme.Typography
 
 
 @Composable
-fun CurrencyConverter(charCode: String, name : String, value: Double) {
+fun CurrencyConverter(charCode: String, name : String, value: Float) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier.fillMaxSize()
@@ -105,20 +105,5 @@ fun CurrencyConverter(charCode: String, name : String, value: Double) {
                 }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode"
-)
-@Composable
-fun DefaultPreview() {
-    FocusStartTheme {
-//        ConverterCard(charCode = "RUB", name = "РОССИЙСКИЙ РУБЛЬ")
-        CurrencyConverter("AUD", "Австралийский доллар", 52.7801)
     }
 }
