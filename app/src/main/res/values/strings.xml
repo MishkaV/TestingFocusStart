@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FocusStart</string>
+    <string name="currency_head">Курс валют</string>
+    <string name="currency_convert">Конвертировать</string>
+    <string name="russian_ruble">Российский рубль</string>
+    <string name="rub">RUB</string>
+    <string name="zero">0</string>
 </resources>

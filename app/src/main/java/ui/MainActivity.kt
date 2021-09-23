@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.R
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,21 +46,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val repository = DailyRepository()
-        val viewModulFactory = MajorViewModulFactory(repository)
-        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
-        viewModel.getDailyData()
-        viewModel.rootResponse.observe(this, Observer { response ->
-            Log.d("TAG", response.toString())
-            setContent {
-                FocusStartTheme {
-                    Surface(color = MaterialTheme.colors.background) {
-                        CurrencyList(response.valuteList)
-                    }
-                }
-            }
-        })
+//        val repository = DailyRepository()
+//        val viewModulFactory = MajorViewModulFactory(repository)
+//        viewModel = ViewModelProvider(this, viewModulFactory).get(MajorViewModel::class.java)
+//        viewModel.getDailyData()
+//        viewModel.rootResponse.observe(this, Observer { response ->
+//            if (response.isSuccessful){
+//                setContent {
+//                    FocusStartTheme {
+//                        Surface(color = MaterialTheme.colors.background) {
+//                            response.body()?.let { CurrencyList(it.valuteList) }
+//                        }
+//                    }
+//                }
+//            }
+//        })
+        setContent {
+            FocusStartTheme {
+//                ConverterCard(charCode = "RUB", name = "РОССИЙСКИЙ РУБЛЬ")
 
+                CurrencyConverter("AUD", "Австралийский доллар", 52.7801)
+            }
+
+        }
     }
 }
 
@@ -66,7 +76,7 @@ class MainActivity : ComponentActivity() {
 fun CurrencyList(currencyList: HashMap<String, ValuteInfo>) {
     Column(horizontalAlignment = Alignment.Start) {
         Text(
-            text = "Курс валют",
+            text = stringResource(com.example.focusstart.R.string.currency_head),
             fontSize = 30.sp,
             modifier = Modifier.padding(start = 14.dp, top = 20.dp)
         )
@@ -74,7 +84,6 @@ fun CurrencyList(currencyList: HashMap<String, ValuteInfo>) {
         Card(
             shape = RoundedCornerShape(10.dp),
             elevation = 20.dp,
-//            border = BorderStroke(1.dp, Color.Black),
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxSize()
@@ -95,7 +104,6 @@ fun CurrencyCard(currency: ValuteInfo) {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = 20.dp,
-//        border = BorderStroke(1.dp, Color.Black),
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
@@ -115,16 +123,14 @@ fun CurrencyCard(currency: ValuteInfo) {
             Column(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.End
-
             ){
-                Text(text = String.format("%.4f", currency.value) + " ₽")
-
+                Text(text = String.format("%.4f", currency.value / currency.nominal) + " ₽")
                 val delta = currency.value - currency.previous
                 var color = Green
                 if (delta < 0)
                     color = Red
                 Text(
-                    text = String.format("%.4f", delta),
+                    text = String.format("%.4f", delta / currency.nominal),
                     color = color
                 )
             }
@@ -134,15 +140,15 @@ fun CurrencyCard(currency: ValuteInfo) {
 }
 
 
-@Preview(showBackground = true)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode"
-)
-@Composable
-fun DefaultPreview() {
-    FocusStartTheme {
-        CurrencyList(Fish.valueList)
-    }
-}
+//@Preview(showBackground = true)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    showBackground = true,
+//    name = "Dark Mode"
+//)
+//@Composable
+//fun DefaultPreview() {
+//    FocusStartTheme {
+////        CurrencyList(Fish.valueList)
+//    }
+//}
